@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/Monomusic.mp3</SourceFile>
+  <SourceTime>2026-04-28T14:41:54.7316299+03:00</SourceTime>
+  <DestFile>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/Monomusic.xnb</DestFile>
+  <DestTime>2026-04-28T14:46:36.514587+03:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2025-10-20T17:25:32+03:00</ImporterTime>
+  <Processor>SongProcessor</Processor>
+  <ProcessorTime>2025-10-20T17:25:32+03:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput>
+    <string>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/Monomusic.ogg</string>
+  </BuildOutput>
+</PipelineBuildEvent>
