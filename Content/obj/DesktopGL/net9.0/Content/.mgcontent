@@ -4,17 +4,19 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/diken.png</File>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/File.spritefont</File>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/Jump.mp3</File>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_block_1.png</File>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_block.png</File>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_player.png</File>
-    <File>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/Monomusic.mp3</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/diken.png</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/File.spritefont</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/Jump.mp3</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_bg.png</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_block_1.png</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_block.png</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_player.png</File>
+    <File>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/Monomusic.mp3</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
     <File>font.spritefont</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

@@ -1,2 +1,2 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/husey/Yeni klasör (4)/Hoppala/Content/Jump.mp3","c:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/Jump.xnb","SoundEffectProcessor","SoundEffectContent",15182,155753,0,1518819
+"c:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_bg.png","c:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/mono_bg.xnb","TextureProcessor","Texture2DContent",26712,746581,0,1410562

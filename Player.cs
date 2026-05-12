@@ -7,25 +7,20 @@ namespace Hoppala;
 
 public class Player
 {
-    // --- PROPERTIES & VARIABLES ---
     public Vector2 pozisyon;
     public Vector2 hizVektoru;
     public Texture2D karakterResmi;
     
-    // Player Health & Status
     public int can = 100;
     public bool hayattaMi = true;
 
-    // Movement & Gravity Settings
     private Keys _yercekimiTusu; 
     private float _yercekimiGucu = 2000f;
-    private float _yercekimiYonu = 1f; // 1 = Down, -1 = Up
+    private float _yercekimiYonu = 1f;
 
-    // Cooldown Mechanism (0.3 seconds)
     private float _beklemeSuresi = 0.3f; 
     private float _zamanSayaci = 0.3f; 
 
-    // --- CONSTRUCTOR ---
     public Player(Texture2D gelenResim, Vector2 gelenPozisyon, Keys gelenTus)
     {
         karakterResmi = gelenResim;
@@ -33,8 +28,7 @@ public class Player
         _yercekimiTusu = gelenTus;
     }
 
-    // --- UPDATE LOGIC ---
-    public void Guncelle(GameTime oyunSuresi, int ekranYuksekligi, List<Rectangle> dikenler)
+    public void Guncelle(GameTime oyunSuresi, int ekranYuksekligi, List<Rectangle> dikenler, List<Rectangle> bloklar)
     {
         if (!hayattaMi) return;
 
@@ -43,7 +37,6 @@ public class Player
 
         _zamanSayaci += deltaZaman;
 
-        // Gravity Flip Input with Cooldown
         if (tuslar.IsKeyDown(_yercekimiTusu) && _zamanSayaci >= _beklemeSuresi)
         {
             _yercekimiYonu *= -1f; 
@@ -51,19 +44,33 @@ public class Player
             _zamanSayaci = 0f;     
         }
 
-        // Apply Physics
         hizVektoru.Y += (_yercekimiGucu * _yercekimiYonu) * deltaZaman;
         pozisyon.Y += hizVektoru.Y * deltaZaman;
 
+        Rectangle oyuncuKutusu = new Rectangle((int)pozisyon.X, (int)pozisyon.Y, karakterResmi.Width, karakterResmi.Height);
 
-        // Screen Boundaries (Fallback)
+        foreach (var blok in bloklar)
+        {
+            if (oyuncuKutusu.Intersects(blok))
+            {
+                if (_yercekimiYonu > 0 && hizVektoru.Y > 0) 
+                {
+                    pozisyon.Y = blok.Top - karakterResmi.Height;
+                    hizVektoru.Y = 0f;
+                }
+                else if (_yercekimiYonu < 0 && hizVektoru.Y < 0) 
+                {
+                    pozisyon.Y = blok.Bottom;
+                    hizVektoru.Y = 0f;
+                }
+                
+                oyuncuKutusu.Y = (int)pozisyon.Y;
+            }
+        }
+
         if (pozisyon.Y > ekranYuksekligi - karakterResmi.Height) pozisyon.Y = ekranYuksekligi - karakterResmi.Height;
         if (pozisyon.Y < 0) pozisyon.Y = 0;
 
-        // Spike Collision Detection (Death Trigger)
-        Rectangle oyuncuKutusu = new Rectangle((int)pozisyon.X, (int)pozisyon.Y, karakterResmi.Width, karakterResmi.Height);
-
-        
         foreach (var diken in dikenler)
         {
             if (oyuncuKutusu.Intersects(diken))
@@ -78,12 +85,10 @@ public class Player
         }
     }
 
-    // --- DRAW LOGIC ---
     public void Ciz(SpriteBatch cizici, Color renk)
     {
         if (!hayattaMi) return;
 
-        // Visual Feedback: Flip vertically when falling upwards
         SpriteEffects efekt = _yercekimiYonu < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
         cizici.Draw(karakterResmi, pozisyon, null, renk, 0f, Vector2.Zero, 1f, efekt, 0f);
     }

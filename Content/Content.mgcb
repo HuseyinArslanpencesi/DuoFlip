@@ -38,6 +38,18 @@
 /processorParam:Quality=Best
 /build:Jump.mp3
 
+#begin mono_bg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:mono_bg.png
+
 #begin mono_block_1.png
 /importer:TextureImporter
 /processor:TextureProcessor

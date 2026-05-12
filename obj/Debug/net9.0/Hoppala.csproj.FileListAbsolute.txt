@@ -40,3 +40,5 @@ c:\Users\husey\Yeni klasör (4)\Hoppala\bin\Debug\net9.0\Content\Monomusic.ogg
 c:\Users\husey\Yeni klasör (4)\Hoppala\bin\Debug\net9.0\Content\Monomusic.xnb
 c:\Users\husey\Yeni klasör (4)\Hoppala\bin\Debug\net9.0\Content\Jump.ogg
 c:\Users\husey\Yeni klasör (4)\Hoppala\bin\Debug\net9.0\Content\Jump.xnb
+C:\Users\husey\Yeni klasör (4)\Hoppala\obj\Debug\net9.0\Hoppala.sourcelink.json
+C:\Users\husey\Yeni klasör (4)\Hoppala\bin\Debug\net9.0\Content\mono_bg.xnb

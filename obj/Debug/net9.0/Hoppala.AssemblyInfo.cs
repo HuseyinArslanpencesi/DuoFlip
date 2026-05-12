@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Hoppala")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d612bb01ab21e5548a93fc47aaedf15b6ef84041")]
 [assembly: System.Reflection.AssemblyProductAttribute("Hoppala")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Hoppala")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

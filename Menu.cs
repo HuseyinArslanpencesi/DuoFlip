@@ -47,19 +47,19 @@ public class Menu
 
     public void Draw(SpriteBatch sb, int w, int h)
     {
-        sb.DrawString(_font, "DUO FLIP", new Vector2(w / 2 - 100, 200), Color.White);
+        sb.DrawString(_font, "DUO FLIP", new Vector2(w / 2 - 100, 200), Color.Black);
 
         if (CurrentState == MenuState.Main)
         {
-            sb.DrawString(_font, "Play Game", new Vector2(playBtn.X, playBtn.Y), Color.White);
-            sb.DrawString(_font, "Settings", new Vector2(settingsBtn.X, settingsBtn.Y), Color.White);
-            sb.DrawString(_font, "Exit", new Vector2(exitBtn.X, exitBtn.Y), Color.White);
+            sb.DrawString(_font, "Play Game", new Vector2(playBtn.X, playBtn.Y), Color.Black);
+            sb.DrawString(_font, "Settings", new Vector2(settingsBtn.X, settingsBtn.Y), Color.Black);
+            sb.DrawString(_font, "Exit", new Vector2(exitBtn.X, exitBtn.Y), Color.Black);
         }
         else
         {
             sb.DrawString(_font, $"Music: {(int)(MusicVolume * 100)}%", new Vector2(playBtn.X, 350), Color.Lime);
             sb.DrawString(_font, $"SFX: {(int)(SfxVolume * 100)}%", new Vector2(playBtn.X, 450), Color.Lime);
-            sb.DrawString(_font, "Back", new Vector2(backBtn.X, backBtn.Y), Color.White);
+            sb.DrawString(_font, "Back", new Vector2(backBtn.X, backBtn.Y), Color.Black);
         }
     }
 }

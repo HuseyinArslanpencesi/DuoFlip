@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_player.png</SourceFile>
+  <SourceFile>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_player.png</SourceFile>
   <SourceTime>2026-04-13T21:46:32.3859748+03:00</SourceTime>
-  <DestFile>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/Content/mono_player.xnb</DestFile>
-  <DestTime>2026-04-28T14:57:21.8936689+03:00</DestTime>
+  <DestFile>C:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/Content/mono_player.xnb</DestFile>
+  <DestTime>2026-05-02T00:03:35.6657946+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T17:25:32+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
