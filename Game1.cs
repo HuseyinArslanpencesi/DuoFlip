@@ -16,22 +16,20 @@ public class Game1 : Game
     private float geriSayimSayaci;
     private int kazananOyuncuNumarasi; 
 
-    // Ekran çıktısını açıkça kilitli bir ekran boyutu sınırına sabitleyen yapıcı metot (Constructor)
+    // Ekranı kilitli bir ekran boyutu sınırına sabitleyen yapıcı metot (Constructor)
     public Game1()
     {
         grafikYoneticisi = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         
-        // Grafiklerin laptoplarda bozulmasını önlemek için arka arabellek boyutlarını kesin olarak kilitliyoruz
+        // Grafiklerin laptoplarda bozulmasını önlemek için kilitliyoruz
         grafikYoneticisi.PreferredBackBufferWidth = OyunAyarlari.Genislik;
         grafikYoneticisi.PreferredBackBufferHeight = OyunAyarlari.Yukseklik;
         grafikYoneticisi.HardwareModeSwitch = false;
         grafikYoneticisi.IsFullScreen = true;
         grafikYoneticisi.ApplyChanges();
     }
-
-    // Çerçevenin (Framework) ilk başlatma ve kurulum rutini
     protected override void Initialize()
     {
         oyunHaritasi = new Harita(); 
@@ -46,8 +44,6 @@ public class Game1 : Game
         o1 = new Oyuncu(Kaynaklar.OyuncuResmi, oyunHaritasi.o1Baslangic, Keys.D); 
         o2 = new Oyuncu(Kaynaklar.OyuncuResmi, oyunHaritasi.o2Baslangic, Keys.K); 
     }
-
-    // Disk üzerindeki içerik öğelerini GPU RAM dokularına yüklemek için başlatma sırasında bir kez çalışır
     protected override void LoadContent()
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -63,7 +59,6 @@ public class Game1 : Game
         }
     }
 
-    // Mantıksal girdi güncellemelerini saniyede 60 kez takip eden standart güncelleme (Update) döngüsü
     protected override void Update(GameTime gameTime)
     {
         var mouse = Mouse.GetState();
@@ -73,7 +68,6 @@ public class Game1 : Game
         MediaPlayer.Volume = menu.MuzikSesSeviyesi;          
         SoundEffect.MasterVolume = menu.EfektSesSeviyesi;      
 
-        // Durum makinesinin yönlendirme geçişlerini yöneten doğrudan akış kontrolü
         if (mevcutOyunDurumu == OyunDurumu.Kazandi)
         {
             if (keys.IsKeyDown(Keys.Space)) mevcutOyunDurumu = OyunDurumu.Menu; 
@@ -84,13 +78,11 @@ public class Game1 : Game
             if (act == "PLAY") { SeviyeyiSifirla(); mevcutOyunDurumu = OyunDurumu.GeriSayim; geriSayimSayaci = 4f; }
             if (act == "EXIT") Exit();
         }
-        else OynanisiGuncelle(gameTime, keys); // Aktif turun oynanış mekaniklerini alt fonksiyona devreder
-
+        else OynanisiGuncelle(gameTime, keys);
         eskiFareDurumu = mouse;
         base.Update(gameTime);
     }
 
-    // Tur içi hareket hesaplamalarını ve elenme kurallarını yöneten alt rutin
     private void OynanisiGuncelle(GameTime gameTime, KeyboardState keys)
     {
         // Escape kısayolu doğrudan ana menü görünümüne geri döner
@@ -134,7 +126,7 @@ public class Game1 : Game
         else if (!o1.hayattaMi && !o2.hayattaMi) mevcutOyunDurumu = OyunDurumu.Menu; // Her ikisinin de aynı karede ölmesi durumunda güvenli geri dönüş seçeneği
     }
 
-    // Renkli pikselleri ekran arabelleğine çizmek için güncellemeden hemen sonra çalışan çizim (Draw) metodu
+    // Renkli pikselleri ekrana çizmek için güncellemeden hemen sonra çalışan çizim (Draw) metodu
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.Black);

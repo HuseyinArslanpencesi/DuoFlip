@@ -33,10 +33,10 @@ public class Oyuncu
         // Girdi olup olmadığını kontrol eder ve yer çekimini tersine çevirmeden önce bekleme süresinin bittiğinden emin olur
         if (Keyboard.GetState().IsKeyDown(yercekimiTusu) && zamanSayaci >= OyunAyarlari.BeklemeSuresi)
         {
-            yercekimiYonu *= -1f;  // Yer çekimi yönünü tersine çevir
-            hizVektoru.Y = 0;      // Temiz bir düşüş geçişi için dikey hızı sıfırlama
-            zamanSayaci = 0f;      // Bekleme süresi zamanlayıcısını sıfırlama
-            Kaynaklar.ZiplamaSesi?.Play(); // Takla/Zıplama ses efektini güvenli bir şekilde çalma
+            yercekimiYonu *= -1f; 
+            hizVektoru.Y = 0;      
+            zamanSayaci = 0f;     
+            Kaynaklar.ZiplamaSesi?.Play();
         }
 
         int size = OyunAyarlari.BlokBoyutu;
@@ -57,8 +57,8 @@ public class Oyuncu
         }
 
         // DİKEY (Y) FİZİK VE ÇARPIŞMA TESPİTÇİSİ
-        hizVektoru.Y += OyunAyarlari.Yercekimi * yercekimiYonu * dt; // Zamanla yer çekimi kuvveti uygula
-        pozisyon.Y += hizVektoru.Y * dt; // Oyuncuyu Y ekseninde hareket ettir
+        hizVektoru.Y += OyunAyarlari.Yercekimi * yercekimiYonu * dt;
+        pozisyon.Y += hizVektoru.Y * dt;
 
         var yKutusu = new Rectangle((int)pozisyon.X, (int)pozisyon.Y, size, size);
         foreach (var n in hedefler)
@@ -69,15 +69,15 @@ public class Oyuncu
             // Eğer normal yer çekimiyse ve katı bir bloğun üstüne iniliyorsa
             if (yercekimiYonu > 0 && hizVektoru.Y >= 0 && yKutusu.Bottom > n.Top && yKutusu.Top < n.Top)
             {
-                pozisyon.Y = n.Top - size; // Ayakları bloğun üstüne sabitle
-                hizVektoru.Y = 0f; // Düşme kuvvetini durdur
+                pozisyon.Y = n.Top - size;
+                hizVektoru.Y = 0f;
                 yKutusu.Y = (int)pozisyon.Y;
             }
             // Eğer ters yer çekimiyse ve katı bir bloğun tavan tabanına çarpılıyorsa
             else if (yercekimiYonu < 0 && hizVektoru.Y <= 0 && yKutusu.Top < n.Bottom && yKutusu.Bottom > n.Bottom)
             {
-                pozisyon.Y = n.Bottom; // Kafayı bloğun altına sabitle
-                hizVektoru.Y = 0f; // Yükselme kuvvetini durdur
+                pozisyon.Y = n.Bottom;
+                hizVektoru.Y = 0f;
                 yKutusu.Y = (int)pozisyon.Y;
             }
         }
@@ -91,7 +91,7 @@ public class Oyuncu
             {
                 can = 0;
                 hayattaMi = false;
-                break; // Diğer dikenleri kontrol etmeyi durdur
+                break;
             }
         }
     }

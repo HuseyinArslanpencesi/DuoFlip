@@ -39,7 +39,7 @@ public class Harita
     // Oluşturulan metin düzeninden fiziksel dikdörtgen çarpışma sınırları oluşturur
     public void Kurulum(int gen, int yuk)
     {
-        HaritayiBirlestir(); // İlk olarak harita düzenini prosedürel olarak oluşturur
+        HaritayiBirlestir();
         
         // Durumu güvenli bir şekilde sıfırlamak için eski listeleri temizler
         blokListesi.Clear(); engelListesi.Clear(); bariyerListesi.Clear(); dikenListesi.Clear(); bitisListesi.Clear();
@@ -94,8 +94,6 @@ public class Harita
     {
         for (int i = 0; i < liste.Count; i++) { var r = liste[i]; r.X -= miktar; liste[i] = r; }
     }
-
-    // Katı öğelerin performans optimizasyonlu birleştirilmiş bir ana koleksiyonunu döndürür
     public List<Rectangle> GetKatiCisimler(OyunDurumu durum)
     {
         katiCisimlerTumu.Clear(); // Bellek şişmesini önlemek için tamponu temizler
@@ -112,7 +110,7 @@ public class Harita
     {
         // Arka planı her zaman tüm pencere ekran genişliği ve yüksekliği boyunca çizer
         sb.Draw(Kaynaklar.ArkaPlanResmi, new Rectangle(0, 0, gen, yuk), Color.White);
-        if (durum is OyunDurumu.Menu or OyunDurumu.Kazandi) return; // Belirtilen ekranlarda oynanış varlıklarını gizler
+        if (durum is OyunDurumu.Menu or OyunDurumu.Kazandi) return;
 
         // Temel platformları ve ölüm duvarlarını çizer
         foreach (var b in blokListesi) sb.Draw(Kaynaklar.BlokResmi, b, Color.White);
