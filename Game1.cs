@@ -3,213 +3,170 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
-using System.Collections.Generic;
-
-namespace Hoppala;
-
-public enum GameState { Menu, Countdown, Playing } 
 
 public class Game1 : Game
-{
-    private GraphicsDeviceManager graphics;
+{   
+    private readonly GraphicsDeviceManager grafikYoneticisi;
     private SpriteBatch spriteBatch;
+    private OyunDurumu mevcutOyunDurumu = OyunDurumu.Menu;
+    private Menu menu;
+    private Harita oyunHaritasi; 
+    private MouseState eskiFareDurumu;
+    private Oyuncu o1, o2;
+    private float geriSayimSayaci;
+    private int kazananOyuncuNumarasi; 
 
-    GameState currentState = GameState.Menu;
-    Menu menu;
-    MouseState oldMouse;
-    KeyboardState oldKeys;
-
-    Player p1, p2;
-    Texture2D dikenResmi;
-    Texture2D bgResmi;
-    Texture2D blokResmi;
-    List<Rectangle> dikenListesi = new List<Rectangle>();
-    List<Rectangle> blokListesi = new List<Rectangle>();
-    
-    Song arkaPlanMuzigi;
-    SoundEffect jumpSound;
-
-    SpriteFont font;
-    float countdownTimer = 0f;
-    
-    float kaydirmaHizi = 150f;
-    float kaydirmaBirikimi = 0f;
-
+    // Ekran çıktısını açıkça kilitli bir ekran boyutu sınırına sabitleyen yapıcı metot (Constructor)
     public Game1()
     {
-        graphics = new GraphicsDeviceManager(this);
+        grafikYoneticisi = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-
-        graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-        graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-        graphics.HardwareModeSwitch = false;
-        graphics.IsFullScreen = true;
-        graphics.ApplyChanges();
+        
+        // Grafiklerin laptoplarda bozulmasını önlemek için arka arabellek boyutlarını kesin olarak kilitliyoruz
+        grafikYoneticisi.PreferredBackBufferWidth = OyunAyarlari.Genislik;
+        grafikYoneticisi.PreferredBackBufferHeight = OyunAyarlari.Yukseklik;
+        grafikYoneticisi.HardwareModeSwitch = false;
+        grafikYoneticisi.IsFullScreen = true;
+        grafikYoneticisi.ApplyChanges();
     }
 
+    // Çerçevenin (Framework) ilk başlatma ve kurulum rutini
     protected override void Initialize()
     {
-        int gen = graphics.PreferredBackBufferWidth;
-        int yuk = graphics.PreferredBackBufferHeight;
-
-        for (int x = 0; x < gen; x += 16)
-        {
-            dikenListesi.Add(new Rectangle(x, 0, 16, 16));
-            dikenListesi.Add(new Rectangle(x, yuk - 16, 16, 16));
-        }
-        for (int y = 16; y < yuk - 16; y += 16)
-        {
-            dikenListesi.Add(new Rectangle(0, y, 16, 16));
-            dikenListesi.Add(new Rectangle(gen - 16, y, 16, 16));
-        }
-
-        int blokBoyutu = 16;
-        int altZeminY = yuk - 120; 
-        int ustZeminY = 120;       
-
-        for (int x = 16; x < gen - 16; x += blokBoyutu)
-        {
-            blokListesi.Add(new Rectangle(x, altZeminY, blokBoyutu, blokBoyutu));
-            blokListesi.Add(new Rectangle(x, ustZeminY, blokBoyutu, blokBoyutu));
-        }
-
+        oyunHaritasi = new Harita(); 
         base.Initialize();
     }
 
+    // Temiz bir oyun döngüsü tekrarı için pozisyonları sıfırlar ve bölüm yapılarını temizler
+    private void SeviyeyiSifirla()
+    {
+        kazananOyuncuNumarasi = 0;
+        oyunHaritasi.Kurulum(OyunAyarlari.Genislik, OyunAyarlari.Yukseklik); 
+        o1 = new Oyuncu(Kaynaklar.OyuncuResmi, oyunHaritasi.o1Baslangic, Keys.D); 
+        o2 = new Oyuncu(Kaynaklar.OyuncuResmi, oyunHaritasi.o2Baslangic, Keys.K); 
+    }
+
+    // Disk üzerindeki içerik öğelerini GPU RAM dokularına yüklemek için başlatma sırasında bir kez çalışır
     protected override void LoadContent()
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
-        
-        font = Content.Load<SpriteFont>("font");
-        menu = new Menu(font, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+        Kaynaklar.Yukle(Content);
+        menu = new Menu(Kaynaklar.YaziTipi, OyunAyarlari.Genislik, OyunAyarlari.Yukseklik);
+        SeviyeyiSifirla(); 
 
-        Texture2D pTex = Content.Load<Texture2D>("mono_player");
-        dikenResmi = Content.Load<Texture2D>("diken");
-        bgResmi = Content.Load<Texture2D>("mono_bg");
-        blokResmi = Content.Load<Texture2D>("mono_block");
-
-        arkaPlanMuzigi = Content.Load<Song>("MonoMusic");
-        jumpSound = Content.Load<SoundEffect>("Jump");
-        
-        MediaPlayer.Play(arkaPlanMuzigi);
-        MediaPlayer.IsRepeating = true;
-
-        int w = graphics.PreferredBackBufferWidth;
-        int h = graphics.PreferredBackBufferHeight;
-
-        p1 = new Player(pTex, new Vector2(w / 3f, h / 2f), Keys.D);
-        p2 = new Player(pTex, new Vector2(w / 1.5f, h / 2f), Keys.K);
+        // Arka planda sürekli dönecek olan ortam müziğini başlatma
+        if (Kaynaklar.ArkaPlanMuzigi != null)
+        {
+            MediaPlayer.IsRepeating = true; 
+            MediaPlayer.Play(Kaynaklar.ArkaPlanMuzigi); 
+        }
     }
 
+    // Mantıksal girdi güncellemelerini saniyede 60 kez takip eden standart güncelleme (Update) döngüsü
     protected override void Update(GameTime gameTime)
     {
-        MouseState mouse = Mouse.GetState();
-        KeyboardState keys = Keyboard.GetState();
+        var mouse = Mouse.GetState();
+        var keys = Keyboard.GetState();
         
-        MediaPlayer.Volume = menu.MusicVolume;
+        // Arayüz (UI) ayar alanlarını anında doğrudan küresel ses donanımı motorlarına bağlar
+        MediaPlayer.Volume = menu.MuzikSesSeviyesi;          
+        SoundEffect.MasterVolume = menu.EfektSesSeviyesi;      
 
-        if (currentState == GameState.Menu)
+        // Durum makinesinin yönlendirme geçişlerini yöneten doğrudan akış kontrolü
+        if (mevcutOyunDurumu == OyunDurumu.Kazandi)
         {
-            string action = menu.Update(mouse, oldMouse);
-            if (action == "PLAY") 
-            {
-                currentState = GameState.Countdown;
-                countdownTimer = 4f; 
-            }
-            if (action == "EXIT") Exit();
+            if (keys.IsKeyDown(Keys.Space)) mevcutOyunDurumu = OyunDurumu.Menu; 
         }
-        else if (currentState == GameState.Countdown)
+        else if (mevcutOyunDurumu == OyunDurumu.Menu)
         {
-            countdownTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
-            if (countdownTimer <= 0)
-            {
-                currentState = GameState.Playing; 
-            }
-
-            if (keys.IsKeyDown(Keys.Escape)) currentState = GameState.Menu;
+            string act = menu.Guncelle(mouse, eskiFareDurumu);
+            if (act == "PLAY") { SeviyeyiSifirla(); mevcutOyunDurumu = OyunDurumu.GeriSayim; geriSayimSayaci = 4f; }
+            if (act == "EXIT") Exit();
         }
-        else if (currentState == GameState.Playing)
-        {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
-            kaydirmaBirikimi += kaydirmaHizi * dt;
-            int artis = (int)kaydirmaBirikimi;
-            
-            if (artis > 0)
-            {
-                kaydirmaBirikimi -= artis;
-                
-                for (int i = 0; i < blokListesi.Count; i++)
-                {
-                    Rectangle b = blokListesi[i];
-                    b.X -= artis;
-                    blokListesi[i] = b;
-                }
-            }
+        else OynanisiGuncelle(gameTime, keys); // Aktif turun oynanış mekaniklerini alt fonksiyona devreder
 
-            int h = graphics.PreferredBackBufferHeight;
-            p1.Guncelle(gameTime, h, dikenListesi, blokListesi);
-            p2.Guncelle(gameTime, h, dikenListesi, blokListesi);
-
-            if (keys.IsKeyDown(Keys.D) && oldKeys.IsKeyUp(Keys.D)) jumpSound.Play(menu.SfxVolume, 0f, 0f);
-            if (keys.IsKeyDown(Keys.K) && oldKeys.IsKeyUp(Keys.K)) jumpSound.Play(menu.SfxVolume, 0f, 0f);
-
-            if (keys.IsKeyDown(Keys.Escape)) currentState = GameState.Menu;
-        }
-
-        oldMouse = mouse;
-        oldKeys = keys;
+        eskiFareDurumu = mouse;
         base.Update(gameTime);
     }
 
+    // Tur içi hareket hesaplamalarını ve elenme kurallarını yöneten alt rutin
+    private void OynanisiGuncelle(GameTime gameTime, KeyboardState keys)
+    {
+        // Escape kısayolu doğrudan ana menü görünümüne geri döner
+        if (keys.IsKeyDown(Keys.Escape)) { mevcutOyunDurumu = OyunDurumu.Menu; return; }
+
+        float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        int size = OyunAyarlari.BlokBoyutu;
+
+        // Nesneleri yalnızca geri sayım bittiğinde ve tur tamamen başladığında sola kaydırır
+        if (mevcutOyunDurumu == OyunDurumu.Oynaniyor) oyunHaritasi.Kaydir(dt);
+
+        var p1Box = new Rectangle((int)o1.pozisyon.X, (int)o1.pozisyon.Y, size, size);
+        var p2Box = new Rectangle((int)o2.pozisyon.X, (int)o2.pozisyon.Y, size, size);
+
+        // Her iki oyuncu için de aktif fizik kare vektörlerini işler
+        o1.Guncelle(gameTime, OyunAyarlari.Yukseklik, oyunHaritasi.dikenListesi, oyunHaritasi.GetKatiCisimler(mevcutOyunDurumu), p2Box);
+        o2.Guncelle(gameTime, OyunAyarlari.Yukseklik, oyunHaritasi.dikenListesi, oyunHaritasi.GetKatiCisimler(mevcutOyunDurumu), p1Box);
+
+        // Eğer bekleme/ısınma sayım aşamasındaysa, geçen süreyi düşer ve kamera kaymasını kilitler
+        if (mevcutOyunDurumu == OyunDurumu.GeriSayim)
+        {
+            geriSayimSayaci -= dt;
+            if (geriSayimSayaci <= 0) mevcutOyunDurumu = OyunDurumu.Oynaniyor;
+            return;
+        }
+
+        // ELENME KURALI 1: Eğer oyuncu ekranın sol sınırının dışına itilirse, ölümü tetikler
+        if (o1.hayattaMi && o1.pozisyon.X + size < 0) { o1.can = 0; o1.hayattaMi = false; }
+        if (o2.hayattaMi && o2.pozisyon.X + size < 0) { o2.can = 0; o2.hayattaMi = false; }
+
+        // STANDART KAZANAN TESPİTİ: Bitiş çizgisi kare düğümleri üzerindeki kesişmeleri kontrol eder
+        foreach (var f in oyunHaritasi.bitisListesi)
+        {
+            if (o1.hayattaMi && p1Box.Intersects(f)) { kazananOyuncuNumarasi = 1; mevcutOyunDurumu = OyunDurumu.Kazandi; }
+            if (o2.hayattaMi && p2Box.Intersects(f)) { kazananOyuncuNumarasi = 2; mevcutOyunDurumu = OyunDurumu.Kazandi; }
+        }
+
+        // ELENME KURALI 2 (HAYATTA KALMA MODU): Biri öldüğünde, hayatta kalan diğer oyuncu anında kazanır
+        if (!o1.hayattaMi && o2.hayattaMi) { kazananOyuncuNumarasi = 2; mevcutOyunDurumu = OyunDurumu.Kazandi; }
+        else if (!o2.hayattaMi && o1.hayattaMi) { kazananOyuncuNumarasi = 1; mevcutOyunDurumu = OyunDurumu.Kazandi; }
+        else if (!o1.hayattaMi && !o2.hayattaMi) mevcutOyunDurumu = OyunDurumu.Menu; // Her ikisinin de aynı karede ölmesi durumunda güvenli geri dönüş seçeneği
+    }
+
+    // Renkli pikselleri ekran arabelleğine çizmek için güncellemeden hemen sonra çalışan çizim (Draw) metodu
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.Black);
-
+        
+        // PointClamp filtresi, grafik nesnelerini büyütürken retro sert piksel kenarı stilini korur
         spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         
-        int w = graphics.PreferredBackBufferWidth;
-        int h = graphics.PreferredBackBufferHeight;
+        int w = OyunAyarlari.Genislik, h = OyunAyarlari.Yukseklik;
+        oyunHaritasi.Ciz(spriteBatch, w, h, mevcutOyunDurumu);
 
-        spriteBatch.Draw(bgResmi, new Rectangle(0, 0, w, h), Color.White);
-        
-        if (currentState == GameState.Menu)
+        // Motor durum işaretçilerine göre ekrana metin kartları yazdıran koşullu blok
+        if (mevcutOyunDurumu == OyunDurumu.Kazandi)
         {
-            menu.Draw(spriteBatch, w, h);
+            string txt = $"OYUNCU {kazananOyuncuNumarasi} KAZANDI!";
+            Vector2 size = Kaynaklar.YaziTipi.MeasureString(txt);
+            spriteBatch.DrawString(Kaynaklar.YaziTipi, txt, new Vector2((w - size.X) / 2, (h - size.Y) / 2), Color.Gold);
+            
+            string txt2 = "SIFIRLAMAK ICIN SPACE'E BAS";
+            Vector2 size2 = Kaynaklar.YaziTipi.MeasureString(txt2);
+            spriteBatch.DrawString(Kaynaklar.YaziTipi, txt2, new Vector2((w - size2.X) / 2, (h - size2.Y) / 2 + 50), Color.White);
         }
+        else if (mevcutOyunDurumu == OyunDurumu.Menu) menu.Ciz(spriteBatch, w, h);
         else
         {
-            foreach (var b in blokListesi)
+            o1.Ciz(spriteBatch, Color.White);
+            o2.Ciz(spriteBatch, Color.Cyan);
+
+            // Başlangıç zamanlayıcıları sırasında ekranda yüzen merkez sayım numaralarını gösterir
+            if (mevcutOyunDurumu == OyunDurumu.GeriSayim)
             {
-                spriteBatch.Draw(blokResmi, b, Color.White);
-            }
-
-            foreach (var d in dikenListesi)
-            {
-                SpriteEffects efekt = SpriteEffects.None;
-                float rotasyon = 0f;
-                Vector2 origin = Vector2.Zero;
-
-                if (d.Y == 0) efekt = SpriteEffects.FlipVertically;
-                else if (d.X == 0) { rotasyon = MathHelper.ToRadians(90); origin = new Vector2(0, 16); }
-                else if (d.X >= w - 16) { rotasyon = MathHelper.ToRadians(-90); origin = new Vector2(16, 0); }
-
-                spriteBatch.Draw(dikenResmi, d, null, Color.White, rotasyon, origin, efekt, 0f);
-            }
-
-            p1.Ciz(spriteBatch, Color.White);
-            p2.Ciz(spriteBatch, Color.Cyan);
-
-            if (currentState == GameState.Countdown)
-            {
-                string txt = "";
-                if (countdownTimer > 3) txt = "3";
-                else if (countdownTimer > 2) txt = "2";
-                else if (countdownTimer > 1) txt = "1";
-                else if (countdownTimer > 0) txt = "GO!";
-                spriteBatch.DrawString(font, txt, new Vector2(w / 2 - 20, 200), Color.Yellow);
+                string txt = geriSayimSayaci > 3 ? "3" : geriSayimSayaci > 2 ? "2" : geriSayimSayaci > 1 ? "1" : geriSayimSayaci > 0 ? "GO!" : "";
+                spriteBatch.DrawString(Kaynaklar.YaziTipi, txt, new Vector2(w / 2 - 20, 200), Color.Yellow);
             }
         }
 

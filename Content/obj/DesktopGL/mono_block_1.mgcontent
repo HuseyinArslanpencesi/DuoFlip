@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/mono_block_1.png</SourceFile>
+  <SourceFile>c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/mono_block_1.png</SourceFile>
   <SourceTime>2026-04-13T21:45:20.1011368+03:00</SourceTime>
-  <DestFile>c:/Users/husey/Yeni klasör (4)/Hoppala/Content/bin/DesktopGL/mono_block_1.xnb</DestFile>
-  <DestTime>2026-04-13T21:49:30.9688636+03:00</DestTime>
+  <DestFile>c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/mono_block_1.xnb</DestFile>
+  <DestTime>2026-05-16T23:13:00.3814863+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T17:25:32+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
