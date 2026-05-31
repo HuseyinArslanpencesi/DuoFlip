@@ -1,9 +1,1 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/diken.png","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/diken.xnb","TextureProcessor","Texture2DContent",219,1109,0,108083
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/File.spritefont","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/font.xnb","FontDescriptionProcessor","SpriteFontContent",2068,21529,0,0652464
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/Jump.mp3","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/Jump.xnb","SoundEffectProcessor","SoundEffectContent",15182,155753,0,9484596
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/mono_bg.png","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/mono_bg.xnb","TextureProcessor","Texture2DContent",26712,746581,0,0519146
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/mono_block_1.png","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/mono_block_1.xnb","TextureProcessor","Texture2DContent",304,1109,0,0020887
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/mono_block.png","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/mono_block.xnb","TextureProcessor","Texture2DContent",380,1109,0,0021993
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/mono_player.png","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/mono_player.xnb","TextureProcessor","Texture2DContent",301,1301,0,0021401
-"c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/Monomusic.mp3","c:/Users/husey/OneDrive/Desktop/global gamejam/DuoFlip/Content/bin/DesktopGL/Monomusic.xnb","SongProcessor","SongContent",1500716,127,1,119564
